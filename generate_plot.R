@@ -1,6 +1,14 @@
 
+# Check if packages are installed, if not install them
+if(!require(scales)) {install.packages(scales)}
+if(!require(ggplot2)) {install.packages(ggplot2)}
+if(!require(dplyr)) {install.packages(dplyr)}
+if(!require(ggsci)) {install.packages(ggsci)}
+
+
 # Function to create the radial plot
-epicRadialPlot <- function(data, empty_bar = 2, ymin = -100, ymax = 120, label_size = 2) {
+epicRadialPlot <- function(data, empty_bar = 2,
+  ymin = -100, ymax = 120, label_size = 2) {
 
   require(scales)
   require(ggplot2)
@@ -93,6 +101,8 @@ epicRadialPlot <- function(data, empty_bar = 2, ymin = -100, ymax = 120, label_s
 
 # Load data
 rawdata <- readr::read_csv("./sample_data.csv")
+
+# Create plots & save to png/pdf
 p <- epicRadialPlot(data = rawdata, empty_bar = 2, ymin=-60, ymax=140)
 ggsave(filename = "radialplot.png", plot = p, width = 8, height = 8)
 ggsave(filename = "radialplot.pdf", plot = p)

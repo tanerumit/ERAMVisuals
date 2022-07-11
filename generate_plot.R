@@ -55,7 +55,11 @@ ERAMRadialPlot <- function(data.to.plot, empty_bar = 2,
                 "R",                    "Flood Monitoring, Response and Recovery", "Flood Emergency Prep, Resp and Relief",     0L,
                 "R",                    "Flood Monitoring, Response and Recovery",               "Flood Disaster Recovery",     0L,
                 "R",                                    "Disaster Risk Financing",   "Disaster Risk Financing Instruments",     0L
-             ) %>%
+             )
+
+  prog_levels <- data$individual
+
+  data <- data %>%
     mutate(group = factor(group, levels = c("P", "I", "C", "R", "E"))) %>%
     mutate(individual = factor(individual, levels = prog_levels)) %>%
     arrange(group)
@@ -164,10 +168,11 @@ ERAMRadialPlot <- function(data.to.plot, empty_bar = 2,
 
 # Create plots & save to png/pdf
 p <- ERAMRadialPlot(data.to.plot = readr::read_csv("./sample_data.csv")[c(1,2,3,6,7,8,10,12,29,30),])
-#ggsave(filename = "radialplot.png", plot = p, width = 8, height = 8)
-ggsave(filename = "radialplot.pdf", plot = p, width = 8, height = 8)
+
+ggsave(filename = "./output/radialplot_partial.png", plot = p, width = 8, height = 8)
+ggsave(filename = "./output/radialplot_partial.pdf", plot = p, width = 8, height = 8)
 
 # Create plots & save to png/pdf
 p <- ERAMRadialPlot(data.to.plot = readr::read_csv("./sample_data.csv"))
-#ggsave(filename = "radialplot2.png", plot = p, width = 8, height = 8)
-ggsave(filename = "radialplot2.pdf", plot = p, width = 8, height = 8)
+ggsave(filename = "./output/radialplot_full.png", plot = p, width = 8, height = 8)
+ggsave(filename = "./output/radialplot_full.pdf", plot = p, width = 8, height = 8)

@@ -1,10 +1,3 @@
-
-# Check if packages are installed, if not install them
-if(!require(scales)) {install.packages(scales)}
-if(!require(ggplot2)) {install.packages(ggplot2)}
-if(!require(dplyr)) {install.packages(dplyr)}
-
-# Function to create the radial plot
 ERAMRadialPlot <- function(data.to.plot, empty_bar = 2,
   ymin = -60, ymax = 140, label_size = 2) {
 
@@ -124,7 +117,8 @@ ERAMRadialPlot <- function(data.to.plot, empty_bar = 2,
 
     # Set yaxis scales
     annotate("text", x = rep(max(data$id),4), y = c(20, 40, 60, 80),
-      label = c("1", "2", "3", "4") , color="grey50", size=5 ,
+      label = c("1", "2", "3", "4") ,
+      color="grey50", size=5 ,
       angle=0, fontface="bold", hjust=1) +
 
     ylim(ymin,ymax) +
@@ -137,7 +131,8 @@ ERAMRadialPlot <- function(data.to.plot, empty_bar = 2,
       plot.margin = unit(rep(-1,4), "cm")
     ) +
     coord_polar() +
-    geom_bar(aes(x=as.factor(id), y=value, fill = group), data = data, stat="identity") +
+    geom_bar(aes(x=as.factor(id), y=value, fill = group),
+      data = data, stat="identity") +
 
     # Add program labels
     geom_text(data=label_data2,
@@ -165,14 +160,3 @@ ERAMRadialPlot <- function(data.to.plot, empty_bar = 2,
 
     return(p)
 }
-
-# Create plots & save to png/pdf
-p <- ERAMRadialPlot(data.to.plot = readr::read_csv("./sample_data.csv")[c(1,2,3,6,7,8,10,12,29,30),])
-
-ggsave(filename = "./output/radialplot_partial.png", plot = p, width = 8, height = 8)
-ggsave(filename = "./output/radialplot_partial.pdf", plot = p, width = 8, height = 8)
-
-# Create plots & save to png/pdf
-p <- ERAMRadialPlot(data.to.plot = readr::read_csv("./sample_data.csv"))
-ggsave(filename = "./output/radialplot_full.png", plot = p, width = 8, height = 8)
-ggsave(filename = "./output/radialplot_full.pdf", plot = p, width = 8, height = 8)

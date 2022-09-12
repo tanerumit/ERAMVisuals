@@ -16,10 +16,11 @@ if(!require(readr)) {install.packages(readr)}
 source("ERAMRadialPlot.R")
 
 # Read-in tabular data from a csv file to create the visual
-data <- readr::read_csv("sample_data.csv")
-
+data_plot <- readr::read_csv("sample_data.csv")
+data_template <- readr::read_csv("data_template.csv")
+  
 # Generate radial plot based on the data
-p <- ERAMRadialPlot(data)
+p <- ERAMRadialPlot(data_plot, data_template)
 
 # Save plot to png  
 ggplot2::ggsave(filename = "radialplot.png", plot = p, width = 8, height = 8)

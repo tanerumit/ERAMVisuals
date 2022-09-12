@@ -1,41 +1,37 @@
 #' ERAM Radial Plot Generation Function
 #'
-#' @param data.to.plot data to pass for plotting (dataframe object)
-#' @param data.template template data format including all programs & sub programs
-#' @param empty_bar number of empty bars between theme groups (numeric)
-#' @param ymin minimum y-axis value on the radial chart  (numeric)
-#' @param ymax maximum y-axis value on the radial chart (numeric)
+#' @param data.to.plot = data to pass for plotting (dataframe object)
+#' @param empty_bar = number of empty bars between theme groups (numeric)
+#' @param ymin minimum y value on the radial chart (numeric)
+#' @param ymax maximum y value on the radial chart (numeric)
 #' @param label_size size of the group labels (numberic)
-
-#' @param theme_colors
 #'
 #' @return
 #' @export
 #'
 #' @examples
-ERAMRadialPlot <- function(data.to.plot = NULL,
-  data.template = NULL,
-  empty_bar = 2,
-  ymin = -60,
-  ymax = 140,
-  label_size = 2,
-  theme_colors = c("E" = '#1b9e77', "P" = '#d95f02', "I" = '#7570b3', "C" = '#e7298a', "R" = '#66a61e')) {
+ERAMRadialPlot <- function(data.to.plot, empty_bar = 2,
+  ymin = -60, ymax = 140, label_size = 2,
+  theme_colors = c("E" = '#e41a1c', "P" = '#377eb8', "I" = '#4daf4a', "C" = '#984ea3', "R" = '#ff7f00')) {
+
 
   require(scales)
   require(ggplot2)
   require(dplyr)
 
-  prog_levels <- data.template$individual
+  prog_levels <- data.to.plot$individual
 
-  data.template <- data.template %>%
+  data.template <- data.to.plot %>%
     mutate(group = factor(group, levels = c("P", "I", "C", "R", "E"))) %>%
     mutate(individual = factor(individual, levels = prog_levels)) %>%
-    arrange(group)
+    arrange(group) %>%
+    mutate(value = 0)
 
   data2 <- data.to.plot %>%
     mutate(group = factor(group, levels = c("P", "I", "C", "R", "E"))) %>%
     mutate(individual = factor(individual, levels = prog_levels)) %>%
     arrange(group) %>%
+    filter(value > 0) %>%
     mutate(value = scales::rescale(value, to=c(20,80)))
 
   mindex <- which(data.template$individual %in% data2$individual)
@@ -91,8 +87,8 @@ ERAMRadialPlot <- function(data.to.plot = NULL,
       colour = "grey50", alpha=1, size=0.5 , inherit.aes = F) +
 
     # Set yaxis scales
-    annotate("text", x = rep(max(data.template$id),4), y = c(20, 40, 60, 80),
-      label = c("1", "2", "3", "4") ,
+    annotate("text", x = rep(max(data.template$id),5), y = c(0, 20, 40, 60, 80),
+      label = c("0", "1", "2", "3", "4") ,
       color="grey50", size=5 ,
       angle=0, fontface="bold", hjust=1) +
 
